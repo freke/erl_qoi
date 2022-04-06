@@ -1,4 +1,4 @@
-.PHONY: compile test eunit ct shell clean
+.PHONY: compile test eunit ct shell clean doc
 
 REBAR = podman run -it --rm -v .:/src -w /src erlang rebar3
 
@@ -27,3 +27,6 @@ clean:
 
 distclean: clean
 	rm -Rf _build
+
+doc:
+	@$(REBAR) edoc

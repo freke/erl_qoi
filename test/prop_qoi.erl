@@ -19,24 +19,26 @@ prop_qoi_rgba(opts) ->
   [{numtests, 500}].
 
 prop_qoi_rgb() -> % auto-exported by Proper
-  C = rgb,
-  ?FORALL({W,H,Img}, image_generator(C),
+  F = rgb,
+  CS = alpha_linear,
+  ?FORALL({W,H,Img}, image_generator(F),
     begin
-      {ok, Qoi} = erl_qoi:encode(#{w => W, h => H, c => C, cs => 0, pixels => Img}),
-      {ok, #{w := Wd, h := Hd, c := C, cs := 0, pixels := ImgD}} = erl_qoi:decode(Qoi),
+      {ok, Qoi} = erl_qoi:encode(#{width => W, height => H, format => F, color_space => CS, pixels => Img}),
+      {ok, #{width := Wd, height := Hd, format := F, color_space := CS, pixels := ImgD}} = erl_qoi:decode(Qoi),
       (Wd =:= W) and (Hd =:= H) and (Img =:= ImgD)
     end
   ).
 
 prop_qoi_rgba() -> % auto-exported by Proper
-  C = rgba,
-  ?FORALL({W,H,Img}, image_generator(C),
+  F = rgba,
+  CS = alpha_linear,
+  ?FORALL({W,H,Img}, image_generator(F),
     begin
-      {ok, Qoi} = erl_qoi:encode(#{w => W, h => H, c => C, cs => 0, pixels => Img}),
-      {ok, #{w := Wd, h := Hd, c := C, cs := 0, pixels := ImgD}} = erl_qoi:decode(Qoi),
+      {ok, Qoi} = erl_qoi:encode(#{width => W, height => H, format => F, color_space => CS, pixels => Img}),
+      {ok, #{width := Wd, height := Hd, format := F, color_space := CS, pixels := ImgD}} = erl_qoi:decode(Qoi),
       (Wd =:= W) and (Hd =:= H) and (Img =:= ImgD)
     end
   ).
 
-image_generator(C) ->
-  ?SIZED(W, ?SIZED(H, {W,H,binary(H*W* case C of rgb -> 3; rgba -> 4 end)})).
+image_generator(Format) ->
+  ?SIZED(W, ?SIZED(H, {W,H,binary(H*W* case Format of rgb -> 3; rgba -> 4 end)})).
