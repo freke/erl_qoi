@@ -13,6 +13,8 @@
 
 -include_lib("common_test/include/ct.hrl").
 
+-include("erl_qoi.hrl").
+
 %%--------------------------------------------------------------------
 %% COMMON TEST CALLBACK FUNCTIONS
 %%--------------------------------------------------------------------
@@ -342,14 +344,14 @@ decode_wikipedia_008_image_test_case(Config) ->
 %%--------------------------------------------------------------------
 %% Help functions
 %%--------------------------------------------------------------------
-to_bit_array(Img, 4) ->
+to_bit_array(#qoi{pixels=Pixels}, 4) ->
   array:from_list(
     lists:map(fun(<<R,G,B,_>>) -> <<R,G,B>> end
-             ,split_packet(4, maps:get(pixels,Img))
+             ,split_packet(4, Pixels)
              )
   );
-to_bit_array(Img, 3) ->
-  array:from_list(split_packet(3, maps:get(pixels,Img))).
+to_bit_array(#qoi{pixels=Pixels}, 3) ->
+  array:from_list(split_packet(3, Pixels)).
 
 split_packet(Size, P) when byte_size(P) >= Size ->
   {Chunk, Rest} = split_binary(P, Size),

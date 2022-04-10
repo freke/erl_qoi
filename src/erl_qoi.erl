@@ -5,6 +5,8 @@
         ,decode/1
         ]).
 
+-include("erl_qoi.hrl").
+
 -ifdef(EUNIT).
 -include_lib("eunit/include/eunit.hrl").
 -endif.
@@ -15,19 +17,12 @@
 -define(diff_op(Rd, Gd, Bd), ?in_range_2(Rd) and ?in_range_2(Gd) and ?in_range_2(Bd)).
 -define(luma_op(Rd, Gd, Bd), ?in_range_6(Gd) and ?in_range_4(Rd - Gd) and ?in_range_4(Bd - Gd)).
 
--type qoi() :: #{width=>pos_integer()
-                ,height=>pos_integer()
-                ,format=>rgb|rgba
-                ,color_space=>alpha_linear|all_linear
-                ,pixels=>binary()
-                }.
-
 -spec new(Width::pos_integer(), Height::pos_integer(), Format::rgb|rgba, ColorSpace::alpha_linear|all_linear, Pixels::binary()) -> qoi().
 new(Width, Height, Format, ColorSpace, Pixels) ->
-  #{width=>Width, height=>Height, format=>Format, color_space=>ColorSpace, pixels=>Pixels}.
+  #qoi{width=Width, height=Height, format=Format, color_space=ColorSpace, pixels=Pixels}.
 
 -spec encode(QOI::qoi()) -> {ok, binary()}.
-encode(#{width:=Width, height:=Height, format:=Format, color_space:=ColorSpace, pixels:= Pixels}) ->
+encode(#qoi{width=Width, height=Height, format=Format, color_space=ColorSpace, pixels= Pixels}) ->
   Chunks = iolist_to_binary(encode_pixels(Pixels, Format)),
   F = case Format of rgb -> 3; rgba -> 4 end,
   CS = case ColorSpace of alpha_linear -> 0; all_linear -> 1 end,
@@ -38,11 +33,11 @@ decode(<<"qoif", Width:32, Height:32, Format:8, ColorSpace:8, Pixels/binary>>) -
   F = case Format of 3 -> rgb; 4 -> rgba end,
   CS = case ColorSpace of 0 -> alpha_linear; 1 -> all_linear end,
   {ok
-  , #{width => Width
-    , height => Height
-    , format => F
-    , color_space => CS
-    , pixels => iolist_to_binary(decode_chunks(Pixels, F))
+  , #qoi{width = Width
+        ,height = Height
+        ,format = F
+        ,color_space = CS
+        ,pixels = iolist_to_binary(decode_chunks(Pixels, F))
     }
   }.
 
