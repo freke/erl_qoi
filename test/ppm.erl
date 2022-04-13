@@ -35,10 +35,10 @@ ppm(Bitmap) ->
   {Width, Height} = Bitmap#bitmap.shape,
   Pixels = ppm_pixels(Bitmap),
   Maxval = 255,  % original ppm format maximum
-  list_to_binary([header()
-                 ,width_and_height(Width, Height)
-                 ,maxval(Maxval)
-                 ,Pixels
+  list_to_binary([ header()
+                 , width_and_height(Width, Height)
+                 , maxval(Maxval)
+                 , Pixels
                  ]).
 
 % write bitmap as ppm file
@@ -64,7 +64,7 @@ load_pixels(Binary) when is_binary(Binary)->
 load_pixels(Acc, <<>>) ->
   array:from_list(lists:reverse(Acc));
 load_pixels(Acc, <<R, G, B, Rest/binary>>) ->
-  load_pixels([<<R,G,B>>|Acc], Rest).
+  load_pixels([<<R, G, B>>|Acc], Rest).
 
 is_whitespace(Byte) ->
   lists:member(Byte, ?WHITESPACES).

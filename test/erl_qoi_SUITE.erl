@@ -36,7 +36,7 @@
 %% @end
 %%--------------------------------------------------------------------
 suite() ->
-    [{timetrap,{seconds,30}}].
+    [{timetrap, {seconds, 30}}].
 
 %%--------------------------------------------------------------------
 %% @doc
@@ -184,13 +184,13 @@ groups() ->
 %% @end
 %%--------------------------------------------------------------------
 all() ->
-  [decode_qoi_logo_image_test_case
-  ,decode_dice_image_test_case
-  ,decode_kodim10_image_test_case
-  ,decode_kodim23_image_test_case
-  ,decode_testcard_image_test_case
-  ,decode_testcard_rgba_image_test_case
-  ,decode_wikipedia_008_image_test_case
+  [ decode_qoi_logo_image_test_case
+  , decode_dice_image_test_case
+  , decode_kodim10_image_test_case
+  , decode_kodim23_image_test_case
+  , decode_testcard_image_test_case
+  , decode_testcard_rgba_image_test_case
+  , decode_wikipedia_008_image_test_case
   ].
 
 
@@ -253,59 +253,74 @@ decode_wikipedia_008_image_test_case() ->
 decode_qoi_logo_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"qoi_logo.qoi").
+  test_image(DataDir, "qoi_logo.qoi"),
+  ok.
 
 decode_dice_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"dice.qoi").
+  test_image(DataDir, "dice.qoi"),
+  ok.
 
 decode_kodim10_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"kodim10.qoi").
+  test_image(DataDir, "kodim10.qoi"),
+  ok.
 
 decode_kodim23_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"kodim23.qoi").
+  test_image(DataDir, "kodim23.qoi"),
+  ok.
 
 decode_testcard_rgba_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"testcard_rgba.qoi").
+  test_image(DataDir, "testcard_rgba.qoi"),
+  ok.
 
 decode_testcard_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"testcard.qoi").
+  test_image(DataDir, "testcard.qoi"),
+  ok.
 
 decode_wikipedia_008_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  test_image(DataDir,"wikipedia_008.qoi").
+  test_image(DataDir, "wikipedia_008.qoi"),
+  ok.
 
 %%--------------------------------------------------------------------
 %% Help functions
 %%--------------------------------------------------------------------
-test_image(DataDir,FileName) ->
+test_image(DataDir, FileName) ->
   FilePath = filename:join(DataDir, FileName),
   {ok, Binary} = file:read_file(FilePath),
-  ct:log("Decode ~s",[FilePath]),
+  ct:log("Decode ~s", [FilePath]),
   {ok, Img} = erl_qoi:decode(Binary),
-  ct:log("Encode ~s",[FilePath]),
+  ct:log("Encode ~s", [FilePath]),
   {ok, Encoded} = erl_qoi:encode(Img),
   <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~s W:~p H:~p C:~p CS:~p",[FilePath, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, iolist_to_binary(filename:basename(FileName, ".qoi")++".ppm")),
-  ct:log("~s~nsize:         ~p~nsize erl_qoi: ~p~nsize qoi:     ~p",[FilePath, size(Img#qoi.pixels), size(Encoded), size(Binary)]),
+  ct:log("~s W:~p H:~p C:~p CS:~p", [FilePath, Width, Height, Channels, CSpace]),
+  PixList = to_bit_array(Img, Channels),
+  ppm:write( {bitmap, rgb, PixList, {Width, Height}}
+           , iolist_to_binary(filename:basename(FileName, ".qoi") ++ ".ppm")
+           ),
+  ct:log( "~s~nsize:         ~p~nsize erl_qoi: ~p~nsize qoi:     ~p"
+        , [ FilePath
+          , byte_size(Img#qoi.pixels)
+          , byte_size(Encoded)
+          , byte_size(Binary)
+          ]
+        ),
   Binary = Encoded.
 
 to_bit_array(#qoi{pixels=Pixels}, 4) ->
   array:from_list(
-    lists:map(fun(<<R,G,B,_>>) -> <<R,G,B>> end
-             ,split_packet(4, Pixels)
+    lists:map( fun(<<R , G, B, _>>) -> <<R, G, B>> end
+             , split_packet(4, Pixels)
              )
   );
 to_bit_array(#qoi{pixels=Pixels}, 3) ->
