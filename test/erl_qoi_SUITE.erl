@@ -253,97 +253,55 @@ decode_wikipedia_008_image_test_case() ->
 decode_qoi_logo_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "qoi_logo.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"qoi_logo.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"qoi_logo.qoi").
 
 decode_dice_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "dice.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"dice.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"dice.qoi").
 
 decode_kodim10_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "kodim10.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"kodim10.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"kodim10.qoi").
 
 decode_kodim23_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "kodim23.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"kodim23.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"kodim23.qoi").
 
 decode_testcard_rgba_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "testcard_rgba.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"testcard_rgba.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"testcard_rgba.qoi").
 
 decode_testcard_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "testcard.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img, Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"testcard.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"testcard.qoi").
 
 decode_wikipedia_008_image_test_case(Config) ->
   logger:set_primary_config(level, info),
   DataDir = ?config(data_dir, Config),
-  FileName = filename:join(DataDir, "wikipedia_008.qoi"),
-  {ok, Binary} = file:read_file(FileName),
-  {ok, Img} = erl_qoi:decode(Binary),
-  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
-  ct:log("~p W:~p H:~p C:~p CS:~p~n",[FileName, Width, Height, Channels, CSpace]),
-  PixList = to_bit_array(Img,Channels),
-  ppm:write({bitmap,rgb,PixList,{Width, Height}}, <<"wikipedia_008.ppm">>),
-  {ok, Encoded} = erl_qoi:encode(Img),
-  binary:bin_to_list(Encoded) =:= binary:bin_to_list(Binary).
+  test_image(DataDir,"wikipedia_008.qoi").
 
 %%--------------------------------------------------------------------
 %% Help functions
 %%--------------------------------------------------------------------
+test_image(DataDir,FileName) ->
+  FilePath = filename:join(DataDir, FileName),
+  {ok, Binary} = file:read_file(FilePath),
+  ct:log("Decode ~s",[FilePath]),
+  {ok, Img} = erl_qoi:decode(Binary),
+  ct:log("Encode ~s",[FilePath]),
+  {ok, Encoded} = erl_qoi:encode(Img),
+  <<"qoif", Width:32, Height:32, Channels:8, CSpace:8, _Rest/binary>> = Binary,
+  ct:log("~s W:~p H:~p C:~p CS:~p",[FilePath, Width, Height, Channels, CSpace]),
+  PixList = to_bit_array(Img,Channels),
+  ppm:write({bitmap,rgb,PixList,{Width, Height}}, iolist_to_binary(filename:basename(FileName, ".qoi")++".ppm")),
+  ct:log("~s~nsize:         ~p~nsize erl_qoi: ~p~nsize qoi:     ~p",[FilePath, size(Img#qoi.pixels), size(Encoded), size(Binary)]),
+  Binary = Encoded.
+
 to_bit_array(#qoi{pixels=Pixels}, 4) ->
   array:from_list(
     lists:map(fun(<<R,G,B,_>>) -> <<R,G,B>> end

@@ -6,6 +6,7 @@ compile:
 	@$(REBAR) compile
 
 test: dialyzer eunit ct proper
+	@$(REBAR) cover
 
 eunit:
 	@$(REBAR) eunit
