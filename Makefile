@@ -1,6 +1,7 @@
-.PHONY: compile test eunit ct shell clean doc
+.PHONY: compile test eunit ct shell clean doc elvis
 
-REBAR = podman run -it --rm -v .:/src -w /src erlang rebar3
+ERLANG = podman run -it --rm -v .:/src -w /src erlang
+REBAR = @$(ERLANG) rebar3
 
 compile:
 	@$(REBAR) compile
@@ -31,3 +32,6 @@ distclean: clean
 
 doc:
 	@$(REBAR) edoc
+
+elvis:
+	@$(ERLANG) ./elvis rock -V --config elvis.config
